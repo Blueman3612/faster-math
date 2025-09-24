@@ -132,14 +132,14 @@ get_math_question(7)
 This gives you a random problem from Track 7 (division problems).
 
 #### Method 2: Ask for a Specific Grade
-```
-get_math_question(grade = 3)
+```gdscript
+get_math_question(null, 3)
 ```
 This gives you any random problem suitable for Grade 3 students.
 
 #### Method 3: Ask for a Specific Type of Math Operation
-```
-get_math_question(operator = 0)
+```gdscript
+get_math_question(null, null, 0)
 ```
 This gives you any addition problem from the entire database.
 
@@ -150,14 +150,14 @@ This gives you any addition problem from the entire database.
 - 3 = Division (/)
 
 #### Method 4: Combine Requirements
-```
-get_math_question(grade = 2, operator = 1)
+```gdscript
+get_math_question(null, 2, 1)
 ```
 This asks for subtraction problems specifically from Grade 2.
 
 #### Method 5: Exclude Problems with Zero
-```
-get_math_question(operator = 0, no_zeroes = true)
+```gdscript
+get_math_question(null, null, 0, true)
 ```
 This gives you addition problems, but skips any that have 0 as one of the numbers (like "0 + 5" or "3 + 0").
 
@@ -179,8 +179,8 @@ When building an actual math game, you'll want to store each piece of informatio
 
 ### Basic Variable Storage
 ```gdscript
-# Get a math problem
-var problem = get_math_question(grade = 2, operator = 0)
+# Get a math problem (Grade 2 addition)
+var problem = get_math_question(null, 2, 0)
 
 # Store each piece of information separately
 var question_text = problem.question        # "7 + 3" - show this to the player
@@ -197,8 +197,8 @@ var grade_level = problem.grade             # "Grade 2" - for difficulty trackin
 
 #### Example 1: Simple Quiz Game
 ```gdscript
-# Generate a new question
-var problem = get_math_question(operator = 0)  # Addition only
+# Generate a new question (addition only)
+var problem = get_math_question(null, null, 0)
 
 # Show the question to the player
 question_label.text = problem.question  # Displays "5 + 8"
@@ -220,7 +220,7 @@ var problems_correct = 0
 
 func generate_next_question():
     # Get problem for current difficulty level
-    var problem = get_math_question(grade = current_grade)
+    var problem = get_math_question(null, current_grade)
     
     # Store what we need for gameplay
     current_question = problem.question
@@ -244,7 +244,7 @@ func on_correct_answer():
 ```gdscript
 # Let player choose what to practice
 func practice_multiplication():
-    var problem = get_math_question(operator = 2, no_zeroes = true)
+    var problem = get_math_question(null, null, 2, true)  # Multiplication, no zeroes
     
     # Store for game logic
     var question = problem.question          # "6 × 4"
@@ -261,7 +261,7 @@ func practice_multiplication():
     }
 
 func practice_division():
-    var problem = get_math_question(operator = 3)
+    var problem = get_math_question(null, null, 3)  # Division
     
     # Division problems might need special handling
     var dividend = problem.operands[0]       # Number being divided
@@ -305,9 +305,9 @@ func track_student_progress(problem, was_correct):
     
     # Decide what to practice next based on performance
     if success_rate < 0.7:  # Less than 70% correct
-        return get_math_question(grade = extract_grade_number(grade), operator = get_operator_number(operation))
+        return get_math_question(null, extract_grade_number(grade), get_operator_number(operation))
     else:  # Doing well, try harder problems
-        return get_math_question(grade = extract_grade_number(grade) + 1, operator = get_operator_number(operation))
+        return get_math_question(null, extract_grade_number(grade) + 1, get_operator_number(operation))
 ```
 
 ### Tips for Game Development
@@ -340,26 +340,26 @@ Problems with zeroes may not be desirable. You can ask the system to skip these 
 ## Example Scenarios
 
 ### Scenario 1: "I want my Grade 2 student to practice addition"
-```
-get_math_question(grade = 2, operator = 0)
+```gdscript
+get_math_question(null, 2, 0)
 ```
 Result: You'll get addition problems appropriate for Grade 2 level.
 
 ### Scenario 2: "Give me any multiplication problem"
-```
-get_math_question(operator = 2)
+```gdscript
+get_math_question(null, null, 2)
 ```
 Result: You'll get a multiplication problem from anywhere in the database.
 
 ### Scenario 3: "I want a specific type of problem from Track 8"
-```
+```gdscript
 get_math_question(8)
 ```
 Result: You'll get a random problem from Track 8 (complex subtraction).
 
 ### Scenario 4: "Give me division problems, but avoid zeros"
-```
-get_math_question(operator = 3, no_zeroes = true)
+```gdscript
+get_math_question(null, null, 3, true)
 ```
 Result: You'll get division problems that don't include 0 as one of the numbers.
 
@@ -406,5 +406,5 @@ Result: 5
 - Look at the "Title" output to see exactly what type of math skill the problem is practicing
 
 ### "I keep getting problems with zero"
-- Add `no_zeroes = true` to exclude zero-based problems
-- Example: `get_math_question(grade = 3, operator = 0, no_zeroes = true)` for Grade 3 addition without zeros
+- Add `true` as the fourth parameter to exclude zero-based problems
+- Example: `get_math_question(null, 3, 0, true)` for Grade 3 addition without zeros
