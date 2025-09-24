@@ -195,18 +195,18 @@ func find_closest_grade_with_operator(target_grade, operator):
 	
 	# Check all grades for the operator
 	for i in range(1, 6):  # grades 1-5
-		var grade_key = ""
+		var grade_key_to_find = ""
 		if i >= 5:
-			grade_key = "grade-5"
+			grade_key_to_find = "grade-5"
 		else:
-			grade_key = "grade-" + str(i)
+			grade_key_to_find = "grade-" + str(i)
 		
-		if math_facts.grades.has(grade_key):
-			var grade_data = math_facts.grades[grade_key]
+		if math_facts.grades.has(grade_key_to_find):
+			var grade_data_to_find = math_facts.grades[grade_key_to_find]
 			var found_operator = false
 			
-			for closest_track_key in grade_data.tracks:
-				var track_data = grade_data.tracks[closest_track_key]
+			for closest_track_key in grade_data_to_find.tracks:
+				var track_data = grade_data_to_find.tracks[closest_track_key]
 				for fact in track_data.facts:
 					if fact.operator == operator_str:
 						found_operator = true
